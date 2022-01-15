@@ -3,102 +3,103 @@
  * 
  * @author Andrea Solís Tejada
  */
-{
-
-    let arrayIds = ["btnCE", "btnC", "btnPorc", "btnSuma", "btn7", "btn8", "btn9", "btnResta", "btn4", "btn5", "btn6", "btnMult", "btn1", "btn2", "btn3", "btnDiv", "btn0", "btnCambSig", "btnComa", "btnIgual"]
+ {
 
     let botones = ["CE", "DEL", "%", "+", "7", "8", "9", "-", "4", "5", "6", "x", "1", "2", "3", "/", "0", "+/-", ",", "="];
 
-    let numero;
     let texto;
-    let signo = "";
-    let bandera = false;
     let entradaDatos;
 
     function init() {
-        crearCalculadora();
+        calculadora.crearCalculadora();
         texto = document.getElementsByClassName("texto")[0];
-        entradaDatos = acciones(entradaDatos, arrayIds);
+        entradaDatos = acciones(entradaDatos, calculadora.arrayIds);
     }
 
-    let crearCalculadora = function () {
-        let contador = 0;
+    let calculadora = {
+        numero: 0,
+        signo: "",
+        bandera: false,
+        arrayIds: ["btnCE", "btnC", "btnPorc", "btnSuma", "btn7", "btn8", "btn9", "btnResta", "btn4", "btn5", "btn6", "btnMult", "btn1", "btn2", "btn3", "btnDiv", "btn0", "btnCambSig", "btnComa", "btnIgual"],
 
-
-        let contenido = document.createElement("div");
-        contenido.className = "calculadora";
-
-        let elemento = document.createElement("div");
-        let input = document.createElement("input");
-        input.type = "text";
-        input.className = "texto";
-        input.id = "texto";
-        input.value = 0;
-
-        elemento.appendChild(input);
-        contenido.appendChild(elemento);
-
-        for (let i = 0; i < 5; i++) {
-            elemento = document.createElement("div");
-            for (let j = 0; j < 4; j++) {
-                input = document.createElement("input");
-                input.type = "button";
-                input.value = botones[contador];
-                input.className = "botones";
-                input.id = arrayIds[contador];
-
-                contador++;
-
-                elemento.appendChild(input);
-            }
+        crearCalculadora: function () {
+            let contador = 0;
+    
+            let contenido = document.createElement("div");
+            contenido.className = "calculadora";
+    
+            let elemento = document.createElement("div");
+            let input = document.createElement("input");
+            input.type = "text";
+            input.className = "texto";
+            input.id = "texto";
+            input.value = 0;
+    
+            elemento.appendChild(input);
             contenido.appendChild(elemento);
+    
+            for (let i = 0; i < 5; i++) {
+                elemento = document.createElement("div");
+                for (let j = 0; j < 4; j++) {
+                    input = document.createElement("input");
+                    input.type = "button";
+                    input.value = botones[contador];
+                    input.className = "botones";
+                    input.id = calculadora.arrayIds[contador];
+    
+                    contador++;
+    
+                    elemento.appendChild(input);
+                }
+                contenido.appendChild(elemento);
+            }
+            document.body.appendChild(contenido);
         }
-        document.body.appendChild(contenido);
     }
 
     function funcionalidad() {
         if (!isNaN(parseInt(this.value))) {
-            if (bandera) {
+            if (calculadora.bandera) {
                 texto.value = 0;
             }
             if (texto.value == 0 && !texto.value.includes(".")) {
                 texto.value = parseFloat(this.value);
             } else {
                 texto.value += parseFloat(this.value);
-                bandera = false;
             }
+            calculadora.bandera = false;
 
         } else {
-            if (signo != "" && this.value != "CE" && this.value != "+/-" && this.value != "," && this.value != "DEL" && this.value != "%") {
+            if (calculadora.signo != "" && this.value != "CE" && this.value != "+/-" && this.value != "," && this.value != "DEL" && this.value != "%") {
                 operaciones();
             }
             comprobacion(this.value);
             if (this.value != "+/-" && this.value != "," && this.value != "CE" && this.value != "DEL") {
-                bandera = true;
+                calculadora.bandera = true;
             }
         }
     }
 
     function comprobacion(value) {
-        numero = acumulador(value, numero, texto);
+        calculadora.numero = acumulador(value, calculadora.numero, texto);
         switch (value) {
             case "+":
-                signo = "+";
+                calculadora.signo = "+";
                 break;
             case "-":
-                signo = "-";
+                calculadora.signo = "-";
                 break;
             case "x":
-                signo = "x";
+                calculadora.signo = "x";
                 break;
             case "/":
-                signo = "/";
+                calculadora.signo = "/";
                 break;
             case "+/-":
                 texto.value = parseFloat(texto.value) * -1;
                 break;
             case ",":
-                if (!bandera) {
+                if (!calculadora.bandera) {
                     if (!texto.value.includes(".")) texto.value += ".";
                 }
                 break;
@@ -109,7 +110,7 @@
                 break;
             case "CE":
                 texto.value = 0;
-                signo = "";
+                calculadora.signo = "";
                 break;
             case "%":
                 texto.value = parseFloat(texto.value) / 100;
@@ -135,26 +136,26 @@
     }
 
     function operaciones() {
-        if (signo != "") {
-            switch (signo) {
+        if (calculadora.signo != "") {
+            switch (calculadora.signo) {
                 case "+":
-                    texto.value = parseFloat(texto.value) + numero;
+                    texto.value = parseFloat(texto.value) + calculadora.numero;
                     break;
                 case "-":
-                    texto.value = numero - parseFloat(texto.value);
+                    texto.value = calculadora.numero - parseFloat(texto.value);
                     break;
                 case "x":
-                    texto.value = parseFloat(texto.value) * numero;
+                    texto.value = parseFloat(texto.value) * calculadora.numero;
                     break;
                 case "/":
                     if (texto.value == 0)
-                        signo == 0
+                    calculadora.signo == 0
                     else
-                        texto.value = numero / parseFloat(texto.value);
+                        texto.value = calculadora.numero / parseFloat(texto.value);
                     break;
             }
         }
-        signo = '';
+        calculadora.signo = '';
     }
 
     document.addEventListener("DOMContentLoaded", init);
