@@ -42,7 +42,7 @@
             elemento = document.createElement("div");
             for (let j = 0; j < 4; j++) {
                 input = document.createElement("input");
-                input.type = "botones";
+                input.type = "button";
                 input.value = botones[contador];
                 input.className = "botones";
                 input.id = arrayIds[contador];
