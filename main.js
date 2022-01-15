@@ -69,6 +69,9 @@
             }
 
         } else {
+            if (signo != "" && this.value != "CE" && this.value != "+/-" && this.value != "," && this.value != "DEL" && this.value != "%") {
+                operaciones();
+            }
             comprobacion(this.value);
             if (this.value != "+/-" && this.value != "," && this.value != "CE" && this.value != "DEL") {
                 bandera = true;
@@ -111,6 +114,9 @@
             case "%":
                 texto.value = parseFloat(texto.value) / 100;
                 break;
+            case "=":
+                operaciones();
+                break;
         }
     }
 
@@ -126,6 +132,29 @@
         if (value == "+" || value == "-" || value == "x" || value == "/")
             numero = parseFloat(texto.value);
         return numero;
+    }
+
+    function operaciones() {
+        if (signo != "") {
+            switch (signo) {
+                case "+":
+                    texto.value = parseFloat(texto.value) + numero;
+                    break;
+                case "-":
+                    texto.value = numero - parseFloat(texto.value);
+                    break;
+                case "x":
+                    texto.value = parseFloat(texto.value) * numero;
+                    break;
+                case "/":
+                    if (texto.value == 0)
+                        signo == 0
+                    else
+                        texto.value = numero / parseFloat(texto.value);
+                    break;
+            }
+        }
+        signo = '';
     }
 
     document.addEventListener("DOMContentLoaded", init);
